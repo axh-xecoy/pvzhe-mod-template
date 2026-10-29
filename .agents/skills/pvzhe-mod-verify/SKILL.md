@@ -11,6 +11,8 @@ description: 安装、启用并实际运行验证 PVZHE pmod，处理独立测�
 
 用户准备分享/发布时，先按 [身份与发布规范](../pvzhe-mod-develop/references/identity-and-release.md) 确认名称、作者与版本，重建最终包并执行 check --release；已安装 ID 冲突只在确认是同一 Mod 升级后允许，不把发布字段检查当作实际功能验收。
 
+自动化对局采集前，按[测试会话准备](references/test-session.md)关闭隔离环境的失焦自动暂停并核实生效，保留手动/模态暂停。启动前合并可共用进程的采集项；失败先在当前会话诊断，重启须有具体原因，不靠重复启动和抢焦点推进测试。
+
 1. 先按 [自定义功能验收](references/feature-acceptance.md) 推导成功与不应发生的行为；自定义验收或重验先读 [验证执行策略](references/verification-strategy.md)，明确本轮条件、可证伪断言及受影响范围，再 build/check。游戏采集、证据判定与报告分开，报告修改先离线执行，不重启整套。内置运行工具只测试 Hello World 或 FeatureLab；自定义功能需另设对应验收，不因示例通过而宣称需求完成。命令与证据范围见 [内置示例验证](references/example-scenarios.md)，仅测试这些示例时读取。
 2. 优先在独立用户目录验证，记录实际路径与测试初始状态。最终生产包也能在隔离环境运行；人工试用不等于安装到日常存档。首次启动、用户名弹窗或复用测试存档时读 [首次启动与存档前提](references/first-run.md)。环境准备与业务断言分别记录，测试驱动不得变成正常 Mod 的启动行为；最终包另验不带测试参数的普通启动，清单声明内容不能只在测试分支注册。
 3. 常规安装先退出游戏，用 `python tools/mod.py install --mods-dir '<确认的 user://Mods>'` 安装当前构建；示例可加 `--example`。在 Mod 管理启用并重启，核对安装包与构建包摘要。安装目录以宿主实际 user:// 为准。
