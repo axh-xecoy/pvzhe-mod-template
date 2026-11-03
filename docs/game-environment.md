@@ -31,6 +31,8 @@ template.lock.json         提交：模板上游与来源提交；初始revision
 
 ## 证据与磁盘整理
 
+发行副本与测试用户数据分开整理：下述runtime_storage命令不回收Godot的user://目录。测试目录登记、保留和安全回收按[测试用户数据生命周期](../.agents/skills/pvzhe-mod-verify/references/userdata-lifecycle.md)，路径从环境/运行记录取得；禁止清空Godot用户数据根或按Test前缀批量删除，玩家日常存档、设置和Mod始终排除。
+
 每轮保留日志、截图、退出/业务报告、源码/Mod/DLL摘要以及驱动，不共享可变业务证据。pack-replay.json与test-pack.tail.bin记录原版PCK摘要、测试头部、追加数据及测试PCK摘要，可精确恢复测试包；不将测试包补丁混入发布Mod。已结束旧轮次可整理：
 
 ```powershell
