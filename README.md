@@ -4,6 +4,10 @@
 
 示例启用后，在主菜单左上角显示 `Hello World! · PVZHE Mod`，同时记录初始化、全部 Mod 加载完成与 UI 挂载日志。详细兼容依据与实测记录见 [兼容说明](docs/compatibility.md)。
 
+**请定期从[官方模板仓库](https://github.com/axh-xecoy/pvzhe-mod-template)检查并同步更新**，尤其在开始新一轮开发、遇到反复报错或游戏更新后。工具、Skills 和 Wiki 会持续修复已知问题；长期使用旧模板可能重复踩坑。可直接告诉 AI：“帮我同步官方模板更新，保留我的 Mod 功能。”AI应按[pvzhe-project-update](.agents/skills/pvzhe-project-update/SKILL.md)审查差异并合并，保留你的代码、资源与身份，核对游戏版本兼容；不要用上游文件直接覆盖已有 Mod，也不必每次对话都升级。
+
+如果 AI 发现大量 `PVZHE Mod Template Test …` 遗留目录，即使由其他 AI 创建，也应按[测试用户数据生命周期](.agents/skills/pvzhe-mod-verify/references/userdata-lifecycle.md)核对并整理：能证明属于已结束且无保留需求的测试数据时可自行清理，无法确认用途时先询问你。**目录名称不是删除依据，玩家存档、设置和 Mod 不得作为临时文件清理。**
+
 ## 开发环境
 
 - Windows x64；拥有完整的受支持C#发布目录，推荐0.31.0（EXE、PCK、`data_PlantsVsZombies_windows_x86_64/`）。支持的准确摘要见game-compatibility.json，其他发行先分析，不能仅凭同一版本号默认兼容。
