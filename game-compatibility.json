@@ -2,6 +2,19 @@
   "schemaVersion": 1,
   "supportedReleases": [
     {
+      "version": "0.32.0",
+      "engine": [
+        4,
+        7,
+        0
+      ],
+      "pckSha256": "ed5850cd3634f231c332fb0e23181f5cae33a4c65cbc911a03df96ce2bfd0528",
+      "assemblies": {
+        "PlantsVsZombies.dll": "bcb0c7857ca645651df805e8fd5e442c5055ef1fdeac8f5f44e15766b8e9002c",
+        "GodotSharp.dll": "c09b4a1be6a2d56ffbd4992ee6e5ef0cf406d49b99620da5c462da261c7f787e"
+      }
+    },
+    {
       "version": "0.31.0",
       "engine": [
         4,

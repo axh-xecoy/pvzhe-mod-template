@@ -23,7 +23,7 @@ template.lock.json         提交：模板上游与来源提交；初始revision
 
 首次执行`python tools/mod.py prepare --game-dir '<玩家发行目录>'`。工具先检查PCK、EXE、完整data_*文件清单和摘要，并匹配模板支持的PCK/关键DLL/引擎基线。新副本校验通过后才轮换：current变old，新版成为current，原old删除。临时incoming/retired目录只是事务过程，不作为第三个长期版本；发现中断事务时先调查，不自动清空。
 
-以后直接`python tools/mod.py prepare`，复用current，不重新复制游戏；资源按需提取到current/resources。版本名称相同但文件摘要不同仍视为不同发行；不能靠目录名、DLL的1.0.0.0或mtime判定。build同时核验环境、模板兼容声明与引用身份；只把官方模板更新到0.31、仍配0.30时会拒绝混用。
+以后直接`python tools/mod.py prepare`，复用current，不重新复制游戏；资源按需提取到current/resources。版本名称相同但文件摘要不同仍视为不同发行；不能靠目录名、DLL的1.0.0.0或mtime判定。build同时核验环境、模板兼容声明与引用身份；模板已升级到新版而本地仍是旧发行时会拒绝混用。
 
 `python tools/game_environment.py status`查看current/old。需要回退且模板仍支持旧发行时，执行`python tools/mod.py prepare --game-dir '.game/old'`，交换两槽并重建引用；不保留第三份。两版淘汰意味着更早的游戏输入不再本地保留，历史报告不被删除，但完整复现可能需玩家再次提供匹配摘要的旧发行。
 

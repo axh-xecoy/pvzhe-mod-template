@@ -138,7 +138,13 @@
       "release": "0.31.0",
       "pckSha256": "1f234c9d7954cbbb1cd3f21691d764c8ea9533477ad87818cf4e6a68d7f70f2c",
       "dllSha256": "820e9e8f91f58062fcfc7548bdb9e5588ec8f822f5ddc71f4b4d83b09a912d95"
+    },
+    {
+      "release": "0.32.0",
+      "pckSha256": "ed5850cd3634f231c332fb0e23181f5cae33a4c65cbc911a03df96ce2bfd0528",
+      "dllSha256": "bcb0c7857ca645651df805e8fd5e442c5055ef1fdeac8f5f44e15766b8e9002c",
+      "evidence": "0.32 reference scenes and AdobeAnimate resources byte-identical to 0.31 for the preset characters (PeaShooterSingle, SplitPea, Cornpult, Starfruit, PuffShroom) and the cornpult component set; fresh 0.32 capture measured bullet speed 300, configured interval 1.5s, ZombieNormal hitbox (-18,-37,44,70). Geometry carried over unchanged."
     }
   ],
-  "verificationNote": "Origin geometry from 0.30 reference poses; 0.31 scene/animation dependencies and live marker paths reviewed, starfruit offsets remeasured. Fresh 0.31 capture measures speed, cadence and hitbox. Reference pose is not a fixed animated muzzle."
+  "verificationNote": "Origin geometry from 0.30 reference poses; 0.31 scene/animation dependencies and live marker paths reviewed, starfruit offsets remeasured. Fresh 0.31 capture measures speed, cadence and hitbox; 0.32 verified by identical reference-resource digests plus a fresh 0.32 capture (speed 300, configured interval 1.5s, measured 1.383s, ZombieNormal hitbox (-18,-37,44,70)). Reference pose is not a fixed animated muzzle."
 }

@@ -4,6 +4,8 @@
 
 0.31的ChoosePacketLimit与MaxSun按[当前差异](../../../../docs/wiki/updates/0.31.0.md#选卡阳光与多格外壳)使用：选卡上限不等于解锁槽数，阳光请求值不等于触顶后的实际增量。旧配置默认仍可沿用，不能为“兼容新版”强行给每个关卡加限制。
 
+0.32把槽数解析收进宿主方法`TowerDefenseLevelSeedBankConfig.ResolveSlotCount(unlockedSlots, mode, limit)`与`TowerDefenseManager.GetPacketSlotNum(config)`；需要读实际槽数时优先复用它们，不自己重算“已解锁与上限取较小值”。差异见[卡槽与选卡](../../../../docs/wiki/updates/0.32.0.md#公开方法的新增可选参数)。
+
 1. 先确认已有项目身份和目录归属。为自己的目录追加章节时保留原有chapterList/levelList、稳定saveKey与顺序；不为一个新章节重建Mod身份，也不覆盖原版或其他Mod目录。确需修改他人目录须另查覆盖契约及进度影响。
 2. 新目录使用独立作者键与Content.Identity的运行键；每个关卡独立Name/saveKey，各难度指向相应配置。章节显示名不作为全局唯一身份。自己的导航需要稳定章节ID时另保存明确映射，不以显示文字或易变数组下标当永久键。
 3. 按LevelCatalogConfig.chapterList→LevelChapterConfig.levelList→LevelChooseConfig构造。每个可选章节/关卡提供有效图卡；宿主层级固定，不支持把另一个章节对象填进关卡列表。需要更多层级时用自己的页面组织，叶子仍解析到合法关卡身份。

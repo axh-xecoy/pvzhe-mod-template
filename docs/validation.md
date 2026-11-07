@@ -251,3 +251,22 @@ FeatureLab首轮在“两次已提交死亡”断言处失败，日志保留.wor
 2026-10-21 图层发射延迟与剪贴板：composition/schema2兼容schema1缺省0，节点延迟逐层相加，预览/时间轴/编译group.startDelaySeconds及PlanSimulation首次时钟保持一致；新增0～5秒批量属性和混合值提示。剪贴板提取无已选祖先的选择森林，复制组保留所有后代，复制内部孤立项展平，新生成所有节点/recipe身份，数量/层级/角色/参数校验后原子插入；输入控件保留原生剪贴板。组菜单去掉进入编辑。模型覆盖非直接祖先保留/父子去重/孤立项展平/ID独立/容量拒绝/来源不变，以及延迟叠加、时钟、边界与往返；浏览器以Ctrl+C/V核对整组带子项、内部项粘贴为一级，0.2秒仅原层一发、0.45秒延迟副本已发，组菜单只有重命名和删除。全套159项测试通过；临时副本与组均清理，仅保留原直线草稿，未应用Mod。
 
 2026-10-22 网页攻击编辑器交付验收：新建pvzhe-attack-editor，删除旧pvzhe-attack-preview Skill目录、Tk攻击GUI、专属文档及14项窗口测试，更新路由/升级/Wiki引用，公共捕获/模型/编译与旧设计数据保留。148项现行测试通过；Hello World构建0警告0错误及包检查通过。隔离真实发行素材会话浏览器完成默认/条件面板、非法值拒绝、草稿保存、复制粘贴、0.25首次+0.1逐颗延迟及确认；实际check/export通过，查看试调9发后正式3发与文件摘要不变，重复导出和viewed采用拒绝。修复候选树原子提交、基础参数校验、零延迟旧编排兼容及1.4倍频率推导1.07秒被旧输入步进拦截的问题。新Skill校验与本地链接扫描通过。证据与边界见[验收报告](attack-editor-acceptance.md)，无新增游戏运行/伤害结论。玩家草稿已保留，原URL交接新版健康服务；测试页及独立服务已清理。
+
+## 0.32.0 模板迁移（2026-11-07）
+
+基线 Windows x64 C# 0.32.0、Godot 4.7.0、PCK v4、28,386 条目；旧默认发行为 0.31.0。差异、影响表、干净玩家流程与证据位置见 [0.32 升级记录](upgrade-0.32.0.md)，操作事实见 [0.32 增量 Wiki](wiki/updates/0.32.0.md)。本节只记录本轮检查结果，不把 0.30/0.31 的旧实测改名。
+
+| 检查 | 结果与范围 |
+| --- | --- |
+| 发行准备 | 新 PCK/DLL 摘要写入 game-compatibility.json；`prepare` 装入 `.game/current`（0.31 进入 `.game/old`），28,386 条目；`catalog.py` 重新生成复用目录，6 个组件与 28 个类型仍存在 |
+| 接口 | `api.json` 与 0.31 逐字节相同（schema/API v3、三个入口方法）；`GetCampFriendly`/`BungiSpawn`/`CharacterDestroy` 增加带默认值参数，新增 `GetPacketSlotNum`、`ResolveSlotCount`。旧已编译 DLL 绑定不会自动匹配，需重新构建；模板 C# 未调用这些方法 |
+| 工具测试 | `python -m unittest discover -s tests -v` 187 项通过 |
+| 构建与产物 | Hello World 与 FeatureLab 的 build/check 通过，允许名单仍只有自己的 DLL、清单与自有 JSON；包摘要 `7a7cc2a8…436583`、`f59ca1ba…005768`。FeatureLab、DragLayout、SuperGatling、AttackLab 四个工程对新引用重新编译，0 警告 0 错误 |
+| Hello World 真实运行 | 隔离用户下启动 0.32：`package applied`、`HELLO_INIT/READY/UI`、退出码 0；截图可见主菜单左上角横幅，左下角显示 0.32.0.0。新用户名框是隔离新存档的预期状态 |
+| FeatureLab 真实运行 | 12 个场景标记通过（UI/弹窗/设置、Mod 关卡、HUD 击杀、简单规则、真实僵尸死亡、胜利）；第二个真实进程读取 bool=false、int=75，`settingsRestartVerified=true` |
+| 资源引用 | 模板中 7 个 `res://` 字面量逐个对照当前 PCK 索引：5 个具体资源（主题、按钮/提示框/战斗控件场景、章节背景图）存在，1 个目录前缀仍有 18 个条目（代码在其上拼接文件名），1 个是文档占位；没有完整字面引用被删除。0.32 删除的 `WitchPoisonBottle.tres` 不在模板引用内 |
+| 攻击预设与采集 | `origins.json` 的 verifiedReleases 增加 0.32 组合。预设依赖的角色场景、AdobeAnimate 资源与玉米投手组件集摘要与 0.31 相同；用 0.32 发行真实采集单发豌豆/普通僵尸：弹速 300、配置间隔 1.5 秒、5 次平均约 1.383 秒、受击矩形 (-18,-37,44,70)，网格起点 (260,75)/9 列 5 行/单元 80×98。以该采集生成的会话通过 `attack_recipe new-session`。未在浏览器确认/采用方案 |
+| 干净玩家流程 | 仅 272 个模板文件与 0.32 发行目录，完成 prepare→build→check→extract→runtime_test 全部通过；未使用源码、Godot 编辑器或主工作区报告 |
+| Wiki/文档 | 新增 0.32 增量入口与升级记录，更新 README、兼容说明、本地环境说明与三份 Skill 参考；0.30/0.31 历史记录保留原日期、版本与证据标签 |
+
+退出阶段仍出现宿主冻结扩展点清理“需要重启”的警告（发生在 `HELLO_SHUTDOWN` 之后），与旧轮一致，不包装为无警告运行；`ObjectDB instance was leaked` 的诊断归因仍未确认。未验证：14 个新植物、2 个新僵尸与 `PresentNG` 生存关卡的实际玩法，`plant-placement-audio-v1` 的陆地/水上音效与预放置读档，联机、完整存档兼容、Android、全部布局/金币占位；0.31/0.30 支持只保留已声明摘要，本轮未重跑对应流程。
