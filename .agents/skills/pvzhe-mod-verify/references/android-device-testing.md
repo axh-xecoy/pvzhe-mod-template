@@ -19,11 +19,13 @@
 
 | 通路 | 前提 | 能做什么 | 主要代价 |
 | --- | --- | --- | --- |
-| **A. `adb run-as`**（首选） | 目标包带 `DEBUGGABLE` | 读写整个 data 目录、取日志、批量推包 | 需要电脑 + adb；仅限本包 |
+| **A. `adb run-as`**（最省事） | 目标包带 `DEBUGGABLE`（需自己改包，见 C） | 读写整个 data 目录、取日志、批量推包 | 需要电脑 + adb；仅限本包；包必须是改签名的 |
 | **B. MT「注入文件提供器」** | 能改 APK 并安装 | 手机上直接用文件管理器读写 data 目录 | 需注入并重装；**目标进程必须运行**；APK 自校验会失效 |
-| **C. 给 APK 加 `android:debuggable="true"`** | 包本身不带 `DEBUGGABLE` | 打开 `run-as`/调试能力 | **必须重签名**，同包名不同签名不能覆盖安装 |
+| **C. 给 APK 加 `android:debuggable="true"`** | 官方包默认不带该标志 | 打开 `run-as`/调试能力（A 的前提） | **必须重签名**，同包名不同签名不能覆盖安装 |
 
-### A. `adb run-as`（0.32.0 官方包直接可用）
+### A. `adb run-as`
+
+`run-as` 需要目标包带 `DEBUGGABLE` 标志。**官方发行包默认不带**；实际做法是自己改包（见通路 C）后再装，或者直接用别人改好的 debuggable 包。本仓验证者就是把官方 APK 加上 `android:debuggable="true"` 重新签名安装后，`adb run-as` 才可用的。
 
 先确认标志位：
 
@@ -33,7 +35,7 @@ $serial = "192.168.1.124:5555"
 & $adb -s $serial shell "dumpsys package xvwugame.PlantsVsZombies" | Select-String 'flags='
 ```
 
-实测输出含 `flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]` ⇒ **发行包本身就是 debuggable，不需要重新打包**（设备未 root，`id` 是 `shell`，`run-as` 直接成功）。
+带 `DEBUGGABLE` 时输出形如 `flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]`，此时 `run-as` 直接可用（设备无需 root；`id` 是 `shell` 也能降权到应用 uid）。反过来说，**看到 `DEBUGGABLE` 只说明"这台机器上装的是改过的包"，不能据此认为发行包本来就带**。
 
 ```powershell
 # 列目录
@@ -67,15 +69,17 @@ $serial = "192.168.1.124:5555"
 
 适用场景：手边没有电脑，想在手机上现场贴 `.pmod`、改 `enabled_mods.json`、导出日志。**本模板未实测该通路**（见 §5）。
 
-### C. 只有包不带 `DEBUGGABLE` 时才需要重打包
+### C. 给官方 APK 加 `android:debuggable="true"`（通 A 的实际前提）
 
-要点：`apktool d` 解包 → 在 `AndroidManifest.xml` 的 `<application>` 上加 `android:debuggable="true"` → `apktool b` 回编 → 重签名后安装。
+要点：`apktool d` 解包 → 在 `AndroidManifest.xml` 的 `<application>` 上加 `android:debuggable="true"` → `apktool b` 回编 → **用别的签名重签** → 安装。
+
+维护者实操结论（实测）：改完重签的包能正常安装运行，`dumpsys package` 显示 `DEBUGGABLE`，`adb run-as` 随即可用（本仓 §3 的推送/备份流程就是在这样的包上跑通的）。
 
 必须记住的代价：
 
-- 同包名 + 不同签名**不能覆盖安装**，只能先卸载 ⇒ **本地存档（`files/Csharp/`）与已装 Mod 一起丢失**，操作前先按 §3-4 备份；
-- 游戏每次更新都要重做一遍；
-- 若发行包带完整性/自校验，重签名可能直接触发拦截（**待验证**）。
+- 同包名 + 不同签名**不能覆盖安装**：得先卸载官方包 ⇒ **`/data` 下的本地存档（`files/Csharp/`）、已装 Mod、Mod 配置一起被清除**。第一次这样装之前先确认没有要保的进度，之后每次更新同理；
+- 游戏每次更新都要重做一遍（新包 → 再改 → 再重签 → 再卸载重装 → 再回灌 Mod 与存档）；
+- 若发行包带完整性/自校验，重签名可能直接触发拦截（**待验证**：本作上述流程未遇到拦截）。
 
 ## 3. 用 adb 推送 pmod 的正确姿势（踩坑记录，均实测）
 
@@ -121,5 +125,6 @@ $serial = "192.168.1.124:5555"
 ## 5. 待验证
 
 - MT「注入文件提供器」在本游戏包上的实测（本文只依据官方说明整理流程与风险，未在本 Mod 环境实际注入）；
-- 重签名（通路 C）对存档、游戏更新链与自校验的影响：**未实测**；本模板遇到的目标包已带 `DEBUGGABLE`，因此没走这条路；
+- 重签名包（通路 C）对**游戏内更新提示/完整性自校验**的影响：本次实操未被拦截，但未做针对性验证；
+- 「重签名必须卸载」导致的存档迁移流程：本文只给出「先备份 `/data` 再卸载」的原则，跨签名回灌 `files/Csharp/` 后的进度兼容性未实测；
 - 无线 adb 在长时间批量传输下会偶发 `device offline`，重连用 `adb connect <ip>:5555`；大包建议分文件推送并逐个校验。
