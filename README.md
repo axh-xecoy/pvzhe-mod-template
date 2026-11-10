@@ -97,6 +97,8 @@ python tools/mod.py verify --log $log
 
 验证成功生成 `dist/verification.json`，记录包与日志摘要，并核对最后一次初始化的 DLL 摘要是否与当前产物一致。该命令检查运行日志，不代替肉眼检查文字位置。关闭或卸载请通过 Mod 管理禁用并重启，之后可删除对应 `.pmod`。
 
+安卓真机的 `user://` 在 `/data/user/0/<包名>/files/`（不是 `/sdcard/Android/data/...`）。需要自行改包增加 `DEBUGGABLE` 标志，以用 `adb run-as` 读写、取日志与备份；手边没有电脑时可用 MT 管理器的「注入文件提供器」导出 data 目录。用 adb 推送 `.pmod` 必须走 base64（`adb shell` 的二进制管道会被截断），推送后逐个校验 md5。路径、命令、踩坑与待验证项见 [安卓真机安装与验证](.agents/skills/pvzhe-mod-verify/references/android-device-testing.md)。
+
 ## 自动运行验证（独立存档）
 
 ```powershell
